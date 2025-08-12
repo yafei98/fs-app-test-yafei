@@ -71,4 +71,15 @@
 
 .food-item-counter img{
     width: 30px;
+    cursor: pointer;
+}
+
+.food-item-counter p{
+    min-width: 24px;
+    text-align: center;
+}
+
+.food-item-counter input{
+    width: 40px;
+    height: 24px;
 }

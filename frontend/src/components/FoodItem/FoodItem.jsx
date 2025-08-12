@@ -1,4 +1,4 @@
-import React, { useContext} from 'react'
+import React, { useContext, useState,useEffect,useRef } from 'react'
 import './FoodItem.css'
 import { assets } from '../../assets/assets'
 import { StoreContext } from '../context/StoreContext';
@@ -6,6 +6,12 @@ import { StoreContext } from '../context/StoreContext';
 const FoodItem = ({id,name,price,description,image}) => {
 
     const {cartItems,addToCart,removeFromCart,url} = useContext(StoreContext);
+    const [editing, setEditing] = useState(false);
+    const inputRef = useRef(null);
+    useEffect(() => {
+        if (editing && inputRef.current) {
+            inputRef.current.focus();
+        }}, [editing]);
 
   return (
     <div className='food-item'>
@@ -15,7 +21,17 @@ const FoodItem = ({id,name,price,description,image}) => {
                 !cartItems[id] ? <img className='add' onClick={()=> addToCart(id)} src={assets.add_icon_white}/>: 
                 <div className="food-item-counter">
                     <img onClick={()=>removeFromCart(id)} src={assets.remove_icon_red} alt="" />
-                    <p>{cartItems[id]}</p>
+                    {!editing && <p onClick={()=>setEditing(true)}>{cartItems[id]}</p>}
+                    {<input
+                    style={{display:editing?"inline":"none"}}
+                     ref={inputRef}
+                     defaultValue={cartItems[id]}
+                     type="number" 
+                     onBlur={(e) => {
+                        addToCart(id, e.target.value )
+                        console.log("blur")
+                        setEditing(false);
+                        }}/>}
                     <img onClick={()=>addToCart(id)}  src={assets.add_icon_green} alt="" />
                 </div>
             }
